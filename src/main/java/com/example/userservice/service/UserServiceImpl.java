@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     BCryptPasswordEncoder passwordEncoder;
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService{
     public UserDto getUserById(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new UsernameNotFoundException("Users not found");
         }
 
@@ -66,10 +66,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDto getUserDetailsByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            throw new UsernameNotFoundException(email);
+        }
+
+        UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
+
+        return userDto;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(username);
 
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new UsernameNotFoundException(username);
         }
 
