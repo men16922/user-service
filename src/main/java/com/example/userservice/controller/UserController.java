@@ -6,6 +6,7 @@ import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
 import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/user-service/")
+@RequestMapping("/")
 public class UserController {
 
     private Environment env;
@@ -48,6 +50,7 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody RequestUser user) {
+        log.info("USER -{}", user);
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -61,6 +64,8 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<ResponseUser>> getUsers() {
+
+        log.info("GET");
         Iterable<UserEntity> userList = userService.getUserByAll();
 
         List<ResponseUser> result = new ArrayList<>();
